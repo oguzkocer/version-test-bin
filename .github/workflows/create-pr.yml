@@ -1,5 +1,8 @@
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      gutenbergMobileVersion:
+        required: true
 
 jobs:
   create-pull-request:
