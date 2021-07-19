@@ -1,6 +1,5 @@
 on:
-  repository_dispatch:
-    types: [create-pull-request]
+  workflow_dispatch
 
 jobs:
   create-pull-request:
