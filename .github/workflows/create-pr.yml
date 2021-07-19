@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 0
       - name: Update Gutenberg Mobile Version
         run: |
-          sed -i 's/ext\.gutenbergMobileVersion = \'.*\'/ext.gutenbergMobileVersion = \'${{ github.event.inputs.gutenbergMobileVersion }}\'/g' build.gradle
+          sed -i "s/ext\.gutenbergMobileVersion = '.*'/ext.gutenbergMobileVersion = '${{ github.event.inputs.gutenbergMobileVersion }}'/g" build.gradle
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
