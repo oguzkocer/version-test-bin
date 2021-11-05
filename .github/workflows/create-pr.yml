@@ -17,4 +17,4 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          commit-message: Update gutenberg mobile version to {{ github.event.inputs.gutenbergMobileVersion }}
+          commit-message: "Update gutenberg mobile version to ${{ github.event.inputs.gutenbergMobileVersion }}"
