@@ -16,8 +16,8 @@ jobs:
       - name: Update Gutenberg Mobile Version
         run: |
           sed -i "s/ext\.gutenbergMobileVersion = '.*'/ext.gutenbergMobileVersion = '$GUTENBERG_MOBILE_VERSION'/g" build.gradle
-      - name: Compute branch name
-        id: compute_branch_name
+      - name: Compute vars
+        id: vars
         run: |
           if [[ $GUTENBERG_MOBILE_VERSION == *"-"* ]]; then
             # Get the substring up to "-" which should be either "trunk" or the PR number
@@ -26,9 +26,10 @@ jobs:
             # If the version doesn't contain a "-", it should be a tag
             echo ::set-output name=branch_name::update-gb-mobile-version/for-tag-$GUTENBERG_MOBILE_VERSION
           fi
+          echo ::set-output name=commit_message::"Update gutenbergMobileVersion to $GUTENBERG_MOBILE_VERSION"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          commit-message: "Update gutenberg mobile version to ${{ GUTENBERG_MOBILE_VERSION }}"
-          branch: ${{ steps.compute_branch_name.outputs.branch_name }}
+          commit-message: ${{ steps.vars.outputs.commit_message }}
+          branch: ${{ steps.vars.outputs.branch_name }}
           delete-branch: true
