@@ -1,0 +1,27 @@
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        required: true
+      gutenberg_hash:
+        required: true
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    env:
+      GUTENBERG_HASH: ${{ github.event.inputs.gutenberg_hash }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Update Gutenberg Hash
+        run: |
+          cd gutenberg
+          git fetch && git checkout $GUTENBERG_HASH
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: "Automated Gutenberg hash update"
+          title: "Automated Gutenberg hash update PR"
+          branch: ${{ github.event.inputs.gutenberg_hash }}
