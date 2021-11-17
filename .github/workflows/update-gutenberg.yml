@@ -1,27 +1,29 @@
 on:
   workflow_dispatch:
     inputs:
-      branch_name:
+      pr_branch_name:
         required: true
-      gutenberg_hash:
+      gutenberg_branch_name:
         required: true
 
 jobs:
   create-pull-request:
     runs-on: ubuntu-latest
     env:
-      GUTENBERG_HASH: ${{ github.event.inputs.gutenberg_hash }}
+      GUTENBERG_BRANCH_NAME: ${{ github.event.inputs.gutenberg_branch_name }}
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          submodules: recursive
       - name: Update Gutenberg Hash
         run: |
-          cd gutenberg
-          git fetch && git checkout $GUTENBERG_HASH
+          git -C gutenberg/ config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+          git submodule sync --recursive gutenberg/
+          git submodule update --init --recursive --remote gutenberg/
+          git -C gutenberg/ checkout $GUTENBERG_BRANCH_NAME
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: "Automated Gutenberg hash update"
           title: "Automated Gutenberg hash update PR"
-          branch: ${{ github.event.inputs.gutenberg_hash }}
+          branch: ${{ github.event.inputs.pr_branch_name }}
