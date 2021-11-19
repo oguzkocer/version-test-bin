@@ -25,5 +25,5 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: "Automated Gutenberg hash update"
-          title: "Automated Gutenberg hash update PR"
+          title: "Automated Gutenberg update for branch ${{ github.event.inputs.gutenberg_branch_name }}"
           branch: ${{ github.event.inputs.pr_branch_name }}
