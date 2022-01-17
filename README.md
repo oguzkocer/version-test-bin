@@ -1,1 +1,1 @@
-version-test-bin
+version-test-bin!
